@@ -1,0 +1,27 @@
+
+entity Applicants {
+	name String
+    surname String
+    age Long
+    phone String
+    email String
+}
+
+
+entity Job {
+    passion String
+    /* In terms of year ex: 0.5 year, 1 year, 1.5 year a.k.a increases with 0.5 step.*/
+    duration Float
+}
+
+entity Education {
+    name String
+    field String
+    degree String
+    grade Float
+}
+
+relationship ManyToOne{
+	Job to Applicants{job(id)}
+    Education to Applicants {education(id)}
+}
