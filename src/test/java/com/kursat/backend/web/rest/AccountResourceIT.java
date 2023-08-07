@@ -14,7 +14,6 @@ import com.kursat.backend.security.AuthoritiesConstants;
 import com.kursat.backend.service.UserService;
 import com.kursat.backend.service.dto.AdminUserDTO;
 import com.kursat.backend.service.dto.PasswordChangeDTO;
-import com.kursat.backend.service.dto.UserDTO;
 import com.kursat.backend.web.rest.vm.KeyAndPasswordVM;
 import com.kursat.backend.web.rest.vm.ManagedUserVM;
 import java.time.Instant;

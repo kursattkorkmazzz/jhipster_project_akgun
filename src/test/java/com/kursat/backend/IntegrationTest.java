@@ -1,6 +1,5 @@
 package com.kursat.backend;
 
-import com.kursat.backend.AkgunBackendApp;
 import com.kursat.backend.config.AsyncSyncConfiguration;
 import com.kursat.backend.config.EmbeddedSQL;
 import java.lang.annotation.ElementType;
