@@ -158,31 +158,26 @@ public class EducationResource {
     }
 
     /**
-     * {@code GET  /educations/:id} : get the "id" education.
-     *
-     * @param id the id of the education to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the education, or with status {@code 404 (Not Found)}.
+     * GET  /educations/:id : get the education of applicant with id "id".
      */
-    @GetMapping("/educations/{id}")
-    public ResponseEntity<Education> getEducation(@PathVariable Long id) {
-        log.debug("REST request to get Education : {}", id);
-        Optional<Education> education = educationRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(education);
+    @GetMapping("/applicants/{applicant_id}/education")
+    public ResponseEntity<Education> getEducation(@PathVariable("applicant_id") Long applicant_id) {
+        Education education = educationRepository.findByApplicantId(applicant_id);
+      if(education == null){
+        return ResponseEntity.noContent().build();
+      }
+        return ResponseEntity.ok().body(education);
     }
 
     /**
-     * {@code DELETE  /educations/:id} : delete the "id" education.
+     * DELETE  /educations/:id : delete the education of applicant with id {id}
      *
-     * @param id the id of the education to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/educations/{id}")
+    @DeleteMapping("/applicants/{applicant_id}/education")
     public ResponseEntity<Void> deleteEducation(@PathVariable Long id) {
-        log.debug("REST request to delete Education : {}", id);
         educationRepository.deleteById(id);
         return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .ok()
             .build();
     }
 }

@@ -9,4 +9,11 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface EducationRepository extends JpaRepository<Education, Long> {}
+public interface EducationRepository extends JpaRepository<Education, Long> {
+
+    @Query(value = "SELECT * FROM Education where applicants_id = ?1",nativeQuery = true)
+    Education findByApplicantId(Long applicantId);
+
+    @Query(value = "DELETE FROM Education where applicants_id = ?1",nativeQuery = true)
+    Education deleteByApplicantId(Long applicantId);
+}

@@ -5,7 +5,7 @@ import com.kursat.backend.repository.JobRepository;
 import com.kursat.backend.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
+import java.util.Objects;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -137,27 +137,15 @@ public class JobResource {
     }
 
     /**
-     * {@code GET  /jobs} : get all the jobs.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of jobs in body.
-     */
-    @GetMapping("/jobs")
-    public List<Job> getAllJobs() {
-        log.debug("REST request to get all Jobs");
-        return jobRepository.findAll();
-    }
-
-    /**
-     * {@code GET  /jobs/:id} : get the "id" job.
-     *
-     * @param id the id of the job to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the job, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/jobs/{id}")
-    public ResponseEntity<Job> getJob(@PathVariable Long id) {
-        log.debug("REST request to get Job : {}", id);
-        Optional<Job> job = jobRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(job);
+     * GET  /jobs/:id : get the job of applicant with id "id"
+    */
+    @GetMapping("/applicants/{applicant_id}/job")
+    public ResponseEntity<Job> getJob(@PathVariable Long applicant_id) {
+        Job job = jobRepository.findByApplicantId(applicant_id);
+        if (job == null){
+            ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok().body(job);
     }
 
     /**
