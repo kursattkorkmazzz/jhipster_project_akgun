@@ -51,7 +51,7 @@ public class EducationResource {
         Education result = educationRepository.save(education);
 
         return ResponseEntity
-            .created(new URI("/applicants/" + id + "/education/"))
+            .created(new URI("/applicants/" + id + "/education"))
             .body(result);
     }
 

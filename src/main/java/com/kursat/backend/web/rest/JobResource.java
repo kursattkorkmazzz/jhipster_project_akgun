@@ -1,20 +1,19 @@
 package com.kursat.backend.web.rest;
 
 import com.kursat.backend.domain.Job;
+import com.kursat.backend.repository.ApplicantsRepository;
 import com.kursat.backend.repository.JobRepository;
 import com.kursat.backend.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.kursat.backend.domain.Job}.
@@ -32,134 +31,133 @@ public class JobResource {
     private String applicationName;
 
     private final JobRepository jobRepository;
-
-    public JobResource(JobRepository jobRepository) {
+private final ApplicantsRepository applicantsRepository;
+    public JobResource(JobRepository jobRepository, ApplicantsRepository applicantsRepository) {
         this.jobRepository = jobRepository;
+        this.applicantsRepository = applicantsRepository;
     }
 
     /**
-     * {@code POST  /jobs} : Create a new job.
+     * POST  /applicants/{id}/jobs : Create a new job at specified ID applicant.
      *
-     * @param job the job to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new job, or with status {@code 400 (Bad Request)} if the job has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/jobs")
-    public ResponseEntity<Job> createJob(@RequestBody Job job) throws URISyntaxException {
-        log.debug("REST request to save Job : {}", job);
+    @PostMapping("/applicants/{id}/job")
+    public ResponseEntity<Job> createJob(@PathVariable Long id, @RequestBody Job job) throws URISyntaxException {
+
         if (job.getId() != null) {
             throw new BadRequestAlertException("A new job cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        job.setApplicantID(id);
         Job result = jobRepository.save(job);
+
         return ResponseEntity
-            .created(new URI("/api/jobs/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .created(new URI("/applicants/" + id + "/job"))
             .body(result);
     }
 
-    /**
-     * {@code PUT  /jobs/:id} : Updates an existing job.
-     *
-     * @param id the id of the job to save.
-     * @param job the job to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated job,
-     * or with status {@code 400 (Bad Request)} if the job is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the job couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     /**
+     * PUT  /applicants/{id}/job : Updates an existing job that is inside of {id} applicant.
      */
-    @PutMapping("/jobs/{id}")
-    public ResponseEntity<Job> updateJob(@PathVariable(value = "id", required = false) final Long id, @RequestBody Job job)
-        throws URISyntaxException {
-        log.debug("REST request to update Job : {}, {}", id, job);
-        if (job.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, job.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+    @PutMapping("/applicants/{id}/job")
+    public ResponseEntity<Job> updateJob(
+        @PathVariable(required = false) final Long id,
+        @RequestBody Job job
+    ) throws URISyntaxException {
+
+        if (!applicantsRepository.existsById(id)) {
+           throw new BadRequestAlertException("The entitiy couldn't find with " + id, ENTITY_NAME, "idnotfound");
         }
 
-        if (!jobRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
+        job.setApplicantID(id);
 
         Job result = jobRepository.save(job);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, job.getId().toString()))
             .body(result);
     }
 
-    /**
-     * {@code PATCH  /jobs/:id} : Partial updates given fields of an existing job, field will ignore if it is null
-     *
-     * @param id the id of the job to save.
-     * @param job the job to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated job,
-     * or with status {@code 400 (Bad Request)} if the job is not valid,
-     * or with status {@code 404 (Not Found)} if the job is not found,
-     * or with status {@code 500 (Internal Server Error)} if the job couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     /**
+     * PATCH  /applicants/{id}/job : Partial updates given fields of an existing job, field will ignore if it is null
      */
-    @PatchMapping(value = "/jobs/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Job> partialUpdateJob(@PathVariable(value = "id", required = false) final Long id, @RequestBody Job job)
-        throws URISyntaxException {
-        log.debug("REST request to partial update Job partially : {}, {}", id, job);
+    @PatchMapping(value = "/applicants/{id}/job", consumes = { "application/json", "application/merge-patch+json" })
+    public ResponseEntity<Job> partialUpdateJob(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody Job job
+    ) throws URISyntaxException {
+
+        
         if (job.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, job.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            throw new BadRequestAlertException("ID cannot be null!", ENTITY_NAME, "idinvalid");
         }
 
-        if (!jobRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        if (!applicantsRepository.existsById(id)) {
+            throw new BadRequestAlertException("The entitiy couldn't find with " + id, ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Job> result = jobRepository
-            .findById(job.getId())
-            .map(existingJob -> {
-                if (job.getPassion() != null) {
-                    existingJob.setPassion(job.getPassion());
-                }
-                if (job.getDuration() != null) {
-                    existingJob.setDuration(job.getDuration());
-                }
+           Job result = jobRepository.findUniqueByApplicantId(id,job.getId());
+            log.debug(result.getClass().toString());
+           
+        if(result == null){
+            return ResponseEntity.badRequest().build();
+        }
 
-                return existingJob;
-            })
-            .map(jobRepository::save);
+        if(job.getPassion() != null){
+            result.setPassion(job.getPassion());
+        }
+       if(job.getDuration() != null){
+            result.setDuration(job.getDuration());
+        }
+        
+        Job newResult = jobRepository.save(result);
 
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, job.getId().toString())
-        );
+        return ResponseEntity.ok().body(newResult);
+      
     }
 
+    
     /**
-     * GET  /jobs/:id : get the job of applicant with id "id"
-    */
-    @GetMapping("/applicants/{applicant_id}/job")
-    public ResponseEntity<Job> getJob(@PathVariable Long applicant_id) {
-        Job job = jobRepository.findByApplicantId(applicant_id);
-        if (job == null){
-            ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok().body(job);
-    }
-
-    /**
-     * {@code DELETE  /jobs/:id} : delete the "id" job.
-     *
-     * @param id the id of the job to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * GET  /jobs : get all the jobs.
      */
-    @DeleteMapping("/jobs/{id}")
-    public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
-        log.debug("REST request to delete Job : {}", id);
-        jobRepository.deleteById(id);
+    @GetMapping("/jobs")
+    public List<Job> getAllJobs() {
+        return jobRepository.getAllJob();
+    }
+
+    /**
+     * GET  /applicants/{applicant_id}/job : get the jobs of applicant with id "id".
+     */
+    @GetMapping("/applicants/{applicant_id}/job")
+    public ResponseEntity<List<Job>> getJob(@PathVariable("applicant_id") Long applicant_id) {
+      List<Job> education = jobRepository.findByApplicantId(applicant_id);
+      if(education == null){
+        return ResponseEntity.noContent().build();
+      }
+        return ResponseEntity.ok().body(education);
+    }
+
+    /**
+     * DELETE  /applicants/{applicant_id}/job : delete the all jobs of applicant with id {id}
+     *
+     */
+    @DeleteMapping("/applicants/{applicant_id}/job")
+    public ResponseEntity<Void> deleteJob(@PathVariable Long applicant_id) {
+        jobRepository.deleteByApplicantId(applicant_id);
         return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .ok()
+            .build();
+    }
+
+    /**
+     * DELETE  /applicants/{applicant_id}/job/{job_id} : delete the all educations of applicant with id {id}
+     */
+    @DeleteMapping("/applicants/{applicant_id}/job/{job_id} ")
+    public ResponseEntity<Void> deleteEducation(@PathVariable Long applicant_id, @PathVariable Long job_id) {
+        log.debug("DELETE METHOD CALLED");
+
+        //jobRepository.deleteUniqueByApplicantId(id, education_id);
+        return ResponseEntity
+            .ok()
             .build();
     }
 }
