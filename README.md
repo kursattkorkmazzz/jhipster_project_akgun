@@ -13,7 +13,7 @@ I tried to install JHipster and generate the project but I got many errors and t
 
 **05.08.2023 - Saturday**
 
-I solved the all errors and create and project succesfully. 
+I solved the all errors and create a project succesfully. 
 I tried to understand project structure in Java language.
 I got that, I need to learn **JDL and JDL-Studio** to create Entity and relatonship between them. In the backend, JHipster takes care of creating database, authentication and other stuff. 
 So, I tried to learn the JDL and how works it. Finally, I saw that all things are related about Spring which is Java framework.  I need to learn Spring framework but this whould take so many times so I decided that I just learn these: **Spring JPA, Spring Security, Spring REST.**
