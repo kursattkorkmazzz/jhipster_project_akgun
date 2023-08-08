@@ -1,8 +1,8 @@
 package com.kursat.backend.web.rest;
 
 import com.kursat.backend.domain.Education;
-import com.kursat.backend.repository.ApplicantsRepository;
 import com.kursat.backend.repository.EducationRepository;
+import com.kursat.backend.repository.ApplicationRepository.ApplicantsRepository;
 import com.kursat.backend.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -144,25 +144,16 @@ public class EducationResource {
      *
      */
     @DeleteMapping("/applicants/{applicant_id}/education")
-    public ResponseEntity<Void> deleteEducation(@PathVariable Long applicant_id) {
-        educationRepository.deleteByApplicantId(applicant_id);
+    public ResponseEntity<Integer> deleteAllEducation(@PathVariable Long applicant_id, @RequestParam(name = "ed_id", required = false) Long education_id) {
+
+        int result;
+        if(education_id==null){
+           result = educationRepository.deleteAllByApplicantId(applicant_id);
+        }
+        result = educationRepository.deleteUniqueByApplicantId(applicant_id, education_id);
         return ResponseEntity
             .ok()
-            .build();
+            .body(result);
     }
-
-    /**
-     * DELETE  /applicants/{applicant_id}/education/{education_id} : delete the all educations of applicant with id {id}
-     */
-    @DeleteMapping("/applicants/{applicant_id}/education/{education_id} ")
-    public ResponseEntity<Void> deleteEducation(@PathVariable Long applicant_id, @PathVariable Long education_id) {
-        log.debug("DELETE MTHOD CALLED");
-
-        //educationRepository.deleteUniqueByApplicantId(id, education_id);
-        return ResponseEntity
-            .ok()
-            .build();
-    }
-
 }
 

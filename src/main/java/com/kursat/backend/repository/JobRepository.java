@@ -21,11 +21,13 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     @Query(value = "SELECT * FROM Job WHERE applicants_id = ?1 AND id = ?2",nativeQuery = true)
     Job findUniqueByApplicantId(Long applicantId, Long jobID);
 
+    @Modifying
     @Query(value = "DELETE FROM Job WHERE applicants_id = ?1",nativeQuery = true)
-    Job deleteByApplicantId(Long applicantId);
+    int deleteAllByApplicantId(Long applicantId);
 
+    @Modifying
     @Query(value = "DELETE FROM Job WHERE applicants_id = ?1 AND id = ?2",nativeQuery = true)
-    Job deleteUniqueByApplicantId(Long applicantId, Long education_id);
+    int deleteUniqueByApplicantId(Long applicantId, Long education_id);
 
     @Query(value = "SELECT * FROM Job", nativeQuery = true)
     List<Job> getAllJob();

@@ -1,8 +1,8 @@
 package com.kursat.backend.web.rest;
 
 import com.kursat.backend.domain.Job;
-import com.kursat.backend.repository.ApplicantsRepository;
 import com.kursat.backend.repository.JobRepository;
+import com.kursat.backend.repository.ApplicationRepository.ApplicantsRepository;
 import com.kursat.backend.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -136,29 +136,22 @@ private final ApplicantsRepository applicantsRepository;
         return ResponseEntity.ok().body(education);
     }
 
+
     /**
-     * DELETE  /applicants/{applicant_id}/job : delete the all jobs of applicant with id {id}
-     *
+     * DELETE  /applicants/{applicant_id}/education : delete the all educations of applicant with id {id} if [jb_id] parameter not given.
+     *                                                delete specified id if [jb_id] parameter given
      */
     @DeleteMapping("/applicants/{applicant_id}/job")
-    public ResponseEntity<Void> deleteJob(@PathVariable Long applicant_id) {
-        jobRepository.deleteByApplicantId(applicant_id);
+    public ResponseEntity<Integer> deleteAllJob(@PathVariable Long applicant_id, @RequestParam(name = "jb_id", required = false) Long job_id) {
+
+        int result;
+        if(job_id==null){
+           result = jobRepository.deleteAllByApplicantId(applicant_id);
+        }
+        result = jobRepository.deleteUniqueByApplicantId(applicant_id, job_id);
         return ResponseEntity
             .ok()
-            .build();
-    }
-
-    /**
-     * DELETE  /applicants/{applicant_id}/job/{job_id} : delete the all educations of applicant with id {id}
-     */
-    @DeleteMapping("/applicants/{applicant_id}/job/{job_id} ")
-    public ResponseEntity<Void> deleteEducation(@PathVariable Long applicant_id, @PathVariable Long job_id) {
-        log.debug("DELETE METHOD CALLED");
-
-        //jobRepository.deleteUniqueByApplicantId(id, education_id);
-        return ResponseEntity
-            .ok()
-            .build();
+            .body(result);
     }
 }
 

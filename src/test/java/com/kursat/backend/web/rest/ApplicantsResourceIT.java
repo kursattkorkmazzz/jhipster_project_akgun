@@ -7,7 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.kursat.backend.IntegrationTest;
 import com.kursat.backend.domain.Applicants;
-import com.kursat.backend.repository.ApplicantsRepository;
+import com.kursat.backend.repository.ApplicationRepository.ApplicantsRepository;
+
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;

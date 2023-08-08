@@ -17,15 +17,16 @@ public interface EducationRepository extends JpaRepository<Education, Long> {
      @Query(value = "SELECT * FROM Education WHERE applicants_id = ?1 AND id = ?2",nativeQuery = true)
     Education findUniqueByApplicantId(Long applicantId, Long educationID);
 
-    @Query(value = "DELETE FROM Education WHERE applicants_id = ?1",nativeQuery = true)
-    Education deleteByApplicantId(Long applicantId);
+    @Modifying
+    @Query(value ="DELETE FROM Education WHERE applicants_id = ?1 AND id = ?2", nativeQuery = true)
+    int deleteUniqueByApplicantId(Long applicantID, Long educationID);
 
-    @Query(value = "DELETE FROM Education WHERE applicants_id = ?1 AND id = ?2",nativeQuery = true)
-    Education deleteUniqueByApplicantId(Long applicantId, Long education_id);
+    @Modifying
+    @Query(value ="DELETE FROM Education WHERE applicants_id = ?1", nativeQuery = true)
+    int deleteAllByApplicantId(Long applicantID);
+
 
     @Query(value = "SELECT * FROM Education", nativeQuery = true)
     List<Education> getAllEducation();
-
-
 
 }
