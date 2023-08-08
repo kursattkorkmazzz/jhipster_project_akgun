@@ -1,159 +1,49 @@
-# akgun-backend
 
-This application was generated using JHipster 8.0.0-beta.2, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.0.0-beta.2](https://www.jhipster.tech/documentation-archive/v8.0.0-beta.2).
+# BACK-END Project for AKGUN
 
-## Project Structure
+## Images of Project
+All images about this projet are inside of folder which is called "akgun-images" in top folder.
 
-Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
+## Daily Report
 
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
+**04.08.2023 - Friday**
 
-`/src/*` structure follows default Java structure.
+I learned fundamentals by reading its documentation at [jhipster.tech](jhipster.tech)
+I tried to install JHipster and generate the project but I got many errors and tried to solve them.
 
-- `.yo-rc.json` - Yeoman configuration file
-  JHipster configuration is stored in this file at `generator-jhipster` key. You may find `generator-jhipster-*` for specific blueprints configuration.
-- `.yo-resolve` (optional) - Yeoman conflict resolver
-  Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if ommited) or force. Lines starting with `#` are considered comments and are ignored.
-- `.jhipster/*.json` - JHipster entity configuration files
-- `/src/main/docker` - Docker configurations for the application and services that the application depends on
+**05.08.2023 - Saturday**
 
-## Development
+I solved the all errors and create and project succesfully. 
+I tried to understand project structure in Java language.
+I got that, I need to learn **JDL and JDL-Studio** to create Entity and relatonship between them. In the backend, JHipster takes care of creating database, authentication and other stuff. 
+So, I tried to learn the JDL and how works it. Finally, I saw that all things are related about Spring which is Java framework.  I need to learn Spring framework but this whould take so many times so I decided that I just learn these: **Spring JPA, Spring Security, Spring REST.**
 
-To start your application in the dev profile, run:
+**06.08.2023 - Sunday**
+I tried to analyze the code structure. 
+Also, I tried to learn what I encounter in analyzing that I don't know.
+I watched videos and tried to connect H2 Database in project.
+In this day, I learned that I can generate just back-end code. So, I regenerate my project with just back-end code.
 
-```
-./mvnw
-```
+**07.08.2023 - Monday**
 
-For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
+Because started to understand JDL, Spring REST and Spring JPA and relationship between them, I started to build my REST API back-end code.
+Firstly, build an JDL structure bu using JDL-Studio. 
+Secondly, import this jdl structure to my project by using `jhipster jdl` command. 
+Then, I connected to my database and import my mockup data.
+Lastly, I started to prepare my Rest Controller. 
+But at the end, I need to write some custom repository functions. So, I had to learn how write my custom repository class.
 
-### JHipster Control Center
+**08.08.2023 - Tuesday**  
+I started to finish all job except these:
 
-JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
+1- I need to write my custom repository.
 
-```
-docker compose -f src/main/docker/jhipster-control-center.yml up
-```
+2- I got some errors. I need so solve them.
 
-## Building for production
+3- I just need to do some tweaks on  my rest controller classes. 
 
-### Packaging as jar
+4- I couldn't finished my filter feature.
 
-To build the final jar and optimize the akgun-backend application for production, run:
-
-```
-./mvnw -Pprod clean verify
-```
-
-To ensure everything worked, run:
-
-```
-java -jar target/*.jar
-```
-
-Refer to [Using JHipster in production][] for more details.
-
-### Packaging as war
-
-To package your application as a war in order to deploy it to an application server, run:
-
-```
-./mvnw -Pprod,war clean verify
-```
-
-## Testing
-
-To launch your application's tests, run:
-
-```
-./mvnw verify
-```
-
-For more information, refer to the [Running tests page][].
-
-### Code quality
-
-Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
-
-```
-docker compose -f src/main/docker/sonar.yml up -d
-```
-
-Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
-
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
-
-Then, run a Sonar analysis:
-
-```
-./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
-
-```
-./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
-
-```
-sonar.login=admin
-sonar.password=admin
-```
-
-For more information, refer to the [Code quality page][].
-
-## Using Docker to simplify development (optional)
-
-You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
-
-For example, to start a postgresql database in a docker container, run:
-
-```
-docker compose -f src/main/docker/postgresql.yml up -d
-```
-
-To stop it and remove the container, run:
-
-```
-docker compose -f src/main/docker/postgresql.yml down
-```
-
-You can also fully dockerize your application and all the services that it depends on.
-To achieve this, first build a docker image of your app by running:
-
-```
-npm run java:docker
-```
-
-Or build a arm64 docker image when using an arm64 processor os like MacOS with M1 processor family running:
-
-```
-npm run java:docker:arm64
-```
-
-Then run:
-
-```
-docker compose -f src/main/docker/app.yml up -d
-```
-
-When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental `Use the new Virtualization framework` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).
-
-For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
-
-## Continuous Integration (optional)
-
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
-
-[JHipster Homepage and latest documentation]: https://www.jhipster.tech
-[JHipster 8.0.0-beta.2 archive]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.2
-[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.2/development/
-[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.2/docker-compose
-[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.2/production/
-[Running tests page]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.2/running-tests/
-[Code quality page]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.2/code-quality/
-[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.2/setting-up-ci/
-[Node.js]: https://nodejs.org/
-[NPM]: https://www.npmjs.com/
+I learned how i can write my custom repository class by reading documentation of Spring JPA.
+By learning this, I done my tweaks on controllers. Also, finished filter feature.
+I got some error. By examining codebase, I tried to solve. And I solve it. 
