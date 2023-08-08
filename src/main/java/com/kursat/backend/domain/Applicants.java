@@ -1,10 +1,7 @@
 package com.kursat.backend.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A Applicants.
@@ -36,14 +33,6 @@ public class Applicants implements Serializable {
 
     @Column(name = "email")
     private String email;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "applicants")
-    @JsonIgnoreProperties(value = { "applicants" }, allowSetters = true)
-    private Set<Job> jobs = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "applicants")
-    @JsonIgnoreProperties(value = { "applicants" }, allowSetters = true)
-    private Set<Education> educations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -123,68 +112,6 @@ public class Applicants implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Set<Job> getJobs() {
-        return this.jobs;
-    }
-
-    public void setJobs(Set<Job> jobs) {
-        if (this.jobs != null) {
-            this.jobs.forEach(i -> i.setApplicants(null));
-        }
-        if (jobs != null) {
-            jobs.forEach(i -> i.setApplicants(this));
-        }
-        this.jobs = jobs;
-    }
-
-    public Applicants jobs(Set<Job> jobs) {
-        this.setJobs(jobs);
-        return this;
-    }
-
-    public Applicants addJob(Job job) {
-        this.jobs.add(job);
-        job.setApplicants(this);
-        return this;
-    }
-
-    public Applicants removeJob(Job job) {
-        this.jobs.remove(job);
-        job.setApplicants(null);
-        return this;
-    }
-
-    public Set<Education> getEducations() {
-        return this.educations;
-    }
-
-    public void setEducations(Set<Education> educations) {
-        if (this.educations != null) {
-            this.educations.forEach(i -> i.setApplicants(null));
-        }
-        if (educations != null) {
-            educations.forEach(i -> i.setApplicants(this));
-        }
-        this.educations = educations;
-    }
-
-    public Applicants educations(Set<Education> educations) {
-        this.setEducations(educations);
-        return this;
-    }
-
-    public Applicants addEducation(Education education) {
-        this.educations.add(education);
-        education.setApplicants(this);
-        return this;
-    }
-
-    public Applicants removeEducation(Education education) {
-        this.educations.remove(education);
-        education.setApplicants(null);
-        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

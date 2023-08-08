@@ -16,3 +16,4 @@ public interface ApplicantsRepository extends JpaRepository<Applicants, Long>{
     @Query(value = "SELECT * FROM Applicants LIMIT ?1 OFFSET ?2", nativeQuery = true)
     List<Applicants> getApplicantsByPaging(Integer limit, Integer offset);
 }
+

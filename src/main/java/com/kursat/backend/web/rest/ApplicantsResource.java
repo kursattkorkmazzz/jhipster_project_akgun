@@ -30,9 +30,9 @@ public class ApplicantsResource {
     public ApplicantsResource(ApplicantsRepository applicantsRepository) {
         this.applicantsRepository = applicantsRepository;
     }
-
+    
     /**
-     * {@code GET  /applicants} : get all the applicants.
+     * GET  /applicants : get all the applicants by doing paging,sorting and filtering.
      */
     @GetMapping("/applicants")
     public List<Applicants> getAllApplicants(PagingDTO paging, SortingDTO sorting, FilterDTO filter) {
@@ -47,7 +47,7 @@ public class ApplicantsResource {
     }
 
     /**
-     * {@code GET  /applicants/:id} : get the "id" applicants.
+     * GET /applicants/:id : get the "id" applicants.
     */
     @GetMapping("/applicants/{id}")
     public ResponseEntity<Applicants> getApplicants(@PathVariable Long id) {
@@ -56,3 +56,4 @@ public class ApplicantsResource {
     }
 
 }
+

@@ -35,6 +35,9 @@ class JobResourceIT {
     private static final Float DEFAULT_DURATION = 1F;
     private static final Float UPDATED_DURATION = 2F;
 
+    private static final Long DEFAULT_APPLICANT_ID = 1L;
+    private static final Long UPDATED_APPLICANT_ID = 2L;
+
     private static final String ENTITY_API_URL = "/api/jobs";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -59,7 +62,7 @@ class JobResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Job createEntity(EntityManager em) {
-        Job job = new Job().passion(DEFAULT_PASSION).duration(DEFAULT_DURATION);
+        Job job = new Job().passion(DEFAULT_PASSION).duration(DEFAULT_DURATION).applicantID(DEFAULT_APPLICANT_ID);
         return job;
     }
 
@@ -70,7 +73,7 @@ class JobResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Job createUpdatedEntity(EntityManager em) {
-        Job job = new Job().passion(UPDATED_PASSION).duration(UPDATED_DURATION);
+        Job job = new Job().passion(UPDATED_PASSION).duration(UPDATED_DURATION).applicantID(UPDATED_APPLICANT_ID);
         return job;
     }
 
@@ -94,6 +97,7 @@ class JobResourceIT {
         Job testJob = jobList.get(jobList.size() - 1);
         assertThat(testJob.getPassion()).isEqualTo(DEFAULT_PASSION);
         assertThat(testJob.getDuration()).isEqualTo(DEFAULT_DURATION);
+        assertThat(testJob.getApplicantID()).isEqualTo(DEFAULT_APPLICANT_ID);
     }
 
     @Test
@@ -127,7 +131,8 @@ class JobResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(job.getId().intValue())))
             .andExpect(jsonPath("$.[*].passion").value(hasItem(DEFAULT_PASSION)))
-            .andExpect(jsonPath("$.[*].duration").value(hasItem(DEFAULT_DURATION.doubleValue())));
+            .andExpect(jsonPath("$.[*].duration").value(hasItem(DEFAULT_DURATION.doubleValue())))
+            .andExpect(jsonPath("$.[*].applicantID").value(hasItem(DEFAULT_APPLICANT_ID.intValue())));
     }
 
     @Test
@@ -143,7 +148,8 @@ class JobResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(job.getId().intValue()))
             .andExpect(jsonPath("$.passion").value(DEFAULT_PASSION))
-            .andExpect(jsonPath("$.duration").value(DEFAULT_DURATION.doubleValue()));
+            .andExpect(jsonPath("$.duration").value(DEFAULT_DURATION.doubleValue()))
+            .andExpect(jsonPath("$.applicantID").value(DEFAULT_APPLICANT_ID.intValue()));
     }
 
     @Test
@@ -165,7 +171,7 @@ class JobResourceIT {
         Job updatedJob = jobRepository.findById(job.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedJob are not directly saved in db
         em.detach(updatedJob);
-        updatedJob.passion(UPDATED_PASSION).duration(UPDATED_DURATION);
+        updatedJob.passion(UPDATED_PASSION).duration(UPDATED_DURATION).applicantID(UPDATED_APPLICANT_ID);
 
         restJobMockMvc
             .perform(
@@ -181,6 +187,7 @@ class JobResourceIT {
         Job testJob = jobList.get(jobList.size() - 1);
         assertThat(testJob.getPassion()).isEqualTo(UPDATED_PASSION);
         assertThat(testJob.getDuration()).isEqualTo(UPDATED_DURATION);
+        assertThat(testJob.getApplicantID()).isEqualTo(UPDATED_APPLICANT_ID);
     }
 
     @Test
@@ -249,7 +256,7 @@ class JobResourceIT {
         Job partialUpdatedJob = new Job();
         partialUpdatedJob.setId(job.getId());
 
-        partialUpdatedJob.passion(UPDATED_PASSION).duration(UPDATED_DURATION);
+        partialUpdatedJob.duration(UPDATED_DURATION).applicantID(UPDATED_APPLICANT_ID);
 
         restJobMockMvc
             .perform(
@@ -263,8 +270,9 @@ class JobResourceIT {
         List<Job> jobList = jobRepository.findAll();
         assertThat(jobList).hasSize(databaseSizeBeforeUpdate);
         Job testJob = jobList.get(jobList.size() - 1);
-        assertThat(testJob.getPassion()).isEqualTo(UPDATED_PASSION);
+        assertThat(testJob.getPassion()).isEqualTo(DEFAULT_PASSION);
         assertThat(testJob.getDuration()).isEqualTo(UPDATED_DURATION);
+        assertThat(testJob.getApplicantID()).isEqualTo(UPDATED_APPLICANT_ID);
     }
 
     @Test
@@ -279,7 +287,7 @@ class JobResourceIT {
         Job partialUpdatedJob = new Job();
         partialUpdatedJob.setId(job.getId());
 
-        partialUpdatedJob.passion(UPDATED_PASSION).duration(UPDATED_DURATION);
+        partialUpdatedJob.passion(UPDATED_PASSION).duration(UPDATED_DURATION).applicantID(UPDATED_APPLICANT_ID);
 
         restJobMockMvc
             .perform(
@@ -295,6 +303,7 @@ class JobResourceIT {
         Job testJob = jobList.get(jobList.size() - 1);
         assertThat(testJob.getPassion()).isEqualTo(UPDATED_PASSION);
         assertThat(testJob.getDuration()).isEqualTo(UPDATED_DURATION);
+        assertThat(testJob.getApplicantID()).isEqualTo(UPDATED_APPLICANT_ID);
     }
 
     @Test

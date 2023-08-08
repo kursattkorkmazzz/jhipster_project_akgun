@@ -12,6 +12,7 @@ entity Job {
     passion String
     /* In terms of year ex: 0.5 year, 1 year, 1.5 year a.k.a increases with 0.5 step.*/
     duration Float
+    applicantID Long
 }
 
 entity Education {
@@ -19,9 +20,5 @@ entity Education {
     field String
     degree String
     grade Float
-}
-
-relationship ManyToOne{
-	Job to Applicants{job(id)}
-    Education to Applicants {education(id)}
+    applicantID Long
 }

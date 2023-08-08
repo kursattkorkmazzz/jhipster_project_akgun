@@ -14,3 +14,4 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     @Query(value = "SELECT * FROM job WHERE applicants_id = ?1",nativeQuery = true)
     Job findByApplicantId(Long applicantId);
 }
+

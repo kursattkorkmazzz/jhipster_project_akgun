@@ -1,6 +1,5 @@
 package com.kursat.backend.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -26,9 +25,8 @@ public class Job implements Serializable {
     @Column(name = "duration")
     private Float duration;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "jobs", "educations" }, allowSetters = true)
-    private Applicants applicants;
+    @Column(name = "applicants_id")
+    private Long applicantID;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -71,17 +69,17 @@ public class Job implements Serializable {
         this.duration = duration;
     }
 
-    public Applicants getApplicants() {
-        return this.applicants;
+    public Long getApplicantID() {
+        return this.applicantID;
     }
 
-    public void setApplicants(Applicants applicants) {
-        this.applicants = applicants;
-    }
-
-    public Job applicants(Applicants applicants) {
-        this.setApplicants(applicants);
+    public Job applicantID(Long applicantID) {
+        this.setApplicantID(applicantID);
         return this;
+    }
+
+    public void setApplicantID(Long applicantID) {
+        this.applicantID = applicantID;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -110,6 +108,7 @@ public class Job implements Serializable {
             "id=" + getId() +
             ", passion='" + getPassion() + "'" +
             ", duration=" + getDuration() +
+            ", applicantID=" + getApplicantID() +
             "}";
     }
 }

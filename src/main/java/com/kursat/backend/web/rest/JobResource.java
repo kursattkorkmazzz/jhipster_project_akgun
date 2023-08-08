@@ -6,7 +6,6 @@ import com.kursat.backend.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
-import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -164,3 +163,4 @@ public class JobResource {
             .build();
     }
 }
+

@@ -41,6 +41,9 @@ class EducationResourceIT {
     private static final Float DEFAULT_GRADE = 1F;
     private static final Float UPDATED_GRADE = 2F;
 
+    private static final Long DEFAULT_APPLICANT_ID = 1L;
+    private static final Long UPDATED_APPLICANT_ID = 2L;
+
     private static final String ENTITY_API_URL = "/api/educations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -65,7 +68,12 @@ class EducationResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Education createEntity(EntityManager em) {
-        Education education = new Education().name(DEFAULT_NAME).field(DEFAULT_FIELD).degree(DEFAULT_DEGREE).grade(DEFAULT_GRADE);
+        Education education = new Education()
+            .name(DEFAULT_NAME)
+            .field(DEFAULT_FIELD)
+            .degree(DEFAULT_DEGREE)
+            .grade(DEFAULT_GRADE)
+            .applicantID(DEFAULT_APPLICANT_ID);
         return education;
     }
 
@@ -76,7 +84,12 @@ class EducationResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Education createUpdatedEntity(EntityManager em) {
-        Education education = new Education().name(UPDATED_NAME).field(UPDATED_FIELD).degree(UPDATED_DEGREE).grade(UPDATED_GRADE);
+        Education education = new Education()
+            .name(UPDATED_NAME)
+            .field(UPDATED_FIELD)
+            .degree(UPDATED_DEGREE)
+            .grade(UPDATED_GRADE)
+            .applicantID(UPDATED_APPLICANT_ID);
         return education;
     }
 
@@ -102,6 +115,7 @@ class EducationResourceIT {
         assertThat(testEducation.getField()).isEqualTo(DEFAULT_FIELD);
         assertThat(testEducation.getDegree()).isEqualTo(DEFAULT_DEGREE);
         assertThat(testEducation.getGrade()).isEqualTo(DEFAULT_GRADE);
+        assertThat(testEducation.getApplicantID()).isEqualTo(DEFAULT_APPLICANT_ID);
     }
 
     @Test
@@ -137,7 +151,8 @@ class EducationResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].field").value(hasItem(DEFAULT_FIELD)))
             .andExpect(jsonPath("$.[*].degree").value(hasItem(DEFAULT_DEGREE)))
-            .andExpect(jsonPath("$.[*].grade").value(hasItem(DEFAULT_GRADE.doubleValue())));
+            .andExpect(jsonPath("$.[*].grade").value(hasItem(DEFAULT_GRADE.doubleValue())))
+            .andExpect(jsonPath("$.[*].applicantID").value(hasItem(DEFAULT_APPLICANT_ID.intValue())));
     }
 
     @Test
@@ -155,7 +170,8 @@ class EducationResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.field").value(DEFAULT_FIELD))
             .andExpect(jsonPath("$.degree").value(DEFAULT_DEGREE))
-            .andExpect(jsonPath("$.grade").value(DEFAULT_GRADE.doubleValue()));
+            .andExpect(jsonPath("$.grade").value(DEFAULT_GRADE.doubleValue()))
+            .andExpect(jsonPath("$.applicantID").value(DEFAULT_APPLICANT_ID.intValue()));
     }
 
     @Test
@@ -177,7 +193,12 @@ class EducationResourceIT {
         Education updatedEducation = educationRepository.findById(education.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedEducation are not directly saved in db
         em.detach(updatedEducation);
-        updatedEducation.name(UPDATED_NAME).field(UPDATED_FIELD).degree(UPDATED_DEGREE).grade(UPDATED_GRADE);
+        updatedEducation
+            .name(UPDATED_NAME)
+            .field(UPDATED_FIELD)
+            .degree(UPDATED_DEGREE)
+            .grade(UPDATED_GRADE)
+            .applicantID(UPDATED_APPLICANT_ID);
 
         restEducationMockMvc
             .perform(
@@ -195,6 +216,7 @@ class EducationResourceIT {
         assertThat(testEducation.getField()).isEqualTo(UPDATED_FIELD);
         assertThat(testEducation.getDegree()).isEqualTo(UPDATED_DEGREE);
         assertThat(testEducation.getGrade()).isEqualTo(UPDATED_GRADE);
+        assertThat(testEducation.getApplicantID()).isEqualTo(UPDATED_APPLICANT_ID);
     }
 
     @Test
@@ -283,6 +305,7 @@ class EducationResourceIT {
         assertThat(testEducation.getField()).isEqualTo(DEFAULT_FIELD);
         assertThat(testEducation.getDegree()).isEqualTo(DEFAULT_DEGREE);
         assertThat(testEducation.getGrade()).isEqualTo(UPDATED_GRADE);
+        assertThat(testEducation.getApplicantID()).isEqualTo(DEFAULT_APPLICANT_ID);
     }
 
     @Test
@@ -297,7 +320,12 @@ class EducationResourceIT {
         Education partialUpdatedEducation = new Education();
         partialUpdatedEducation.setId(education.getId());
 
-        partialUpdatedEducation.name(UPDATED_NAME).field(UPDATED_FIELD).degree(UPDATED_DEGREE).grade(UPDATED_GRADE);
+        partialUpdatedEducation
+            .name(UPDATED_NAME)
+            .field(UPDATED_FIELD)
+            .degree(UPDATED_DEGREE)
+            .grade(UPDATED_GRADE)
+            .applicantID(UPDATED_APPLICANT_ID);
 
         restEducationMockMvc
             .perform(
@@ -315,6 +343,7 @@ class EducationResourceIT {
         assertThat(testEducation.getField()).isEqualTo(UPDATED_FIELD);
         assertThat(testEducation.getDegree()).isEqualTo(UPDATED_DEGREE);
         assertThat(testEducation.getGrade()).isEqualTo(UPDATED_GRADE);
+        assertThat(testEducation.getApplicantID()).isEqualTo(UPDATED_APPLICANT_ID);
     }
 
     @Test
