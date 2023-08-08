@@ -31,13 +31,22 @@ public class ApplicantsResource {
         this.applicantsRepository = applicantsRepository;
     }
     
+
+    @GetMapping("/applicants/test")
+    public List<Applicants> testAPI(){
+        return applicantsRepository.runSQL("WHERE id=0");
+    }
+
     /**
      * GET  /applicants : get all the applicants by doing paging,sorting and filtering.
      */
     @GetMapping("/applicants")
     public List<Applicants> getAllApplicants(PagingDTO paging, SortingDTO sorting, FilterDTO filter) {
-        Integer page = paging.getPage() * paging.getSize();
-        return applicantsRepository.getApplicantsByPaging(paging.getSize(), page);
+        
+        String paginationSQL = applicantsRepository.getPaginationSQLQuery(paging);
+        String orderingSQL = applicantsRepository.getSortingSQLQuery(sorting);
+
+        return applicantsRepository.runSQL(orderingSQL + paginationSQL);
         /* 
         String SQLQuery = "WHERE";
         if(filter != null){
