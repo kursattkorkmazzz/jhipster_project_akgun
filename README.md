@@ -2,7 +2,7 @@
 # BACK-END Project for AKGUN
 
 ## Images of Project
-All images about this projet are inside of folder which is called "akgun-images" in top folder.
+All images about this project are inside of folder which is called "akgun-images" in top folder.
 
 ## Daily Report
 
